@@ -58,7 +58,7 @@ Estimated Time: 30 minutes
                ),
                COSINE
              )
-    FETCH FIRST 5 ROWS ONLY
+    FETCH APPROXIMATE FIRST 5 ROWS ONLY
     WITH TARGET ACCURACY 90;
     ```
 
@@ -84,7 +84,7 @@ Estimated Time: 30 minutes
                ),
                COSINE
              )
-    FETCH FIRST 5 ROWS ONLY
+    FETCH APPROXIMATE FIRST 5 ROWS ONLY
     WITH TARGET ACCURACY 90;
     ```
 
@@ -121,7 +121,7 @@ Estimated Time: 30 minutes
                ),
                COSINE
              )
-    FETCH FIRST 5 ROWS ONLY
+    FETCH APPROXIMATE FIRST 5 ROWS ONLY
     WITH TARGET ACCURACY 90;
     ```
 
@@ -153,7 +153,7 @@ Estimated Time: 30 minutes
                  ),
                  COSINE
                )
-      FETCH FIRST 20 ROWS ONLY
+      FETCH APPROXIMATE FIRST 20 ROWS ONLY
       WITH TARGET ACCURACY 90
     )
     SELECT title, year, genre
