@@ -45,47 +45,61 @@ Estimated Time: 30 minutes
 
 1. Use the duality view in a semantic SQL query and return the top five matching movie documents.
 
-    Query the application-facing `MOVIES_DV` document directly. The `embedding` field maps to the relational `MOVIES.EMBEDDING_E5_BASE` column, and the `vector()` dot-notation method makes the JSON value available as a SQL `VECTOR`. Oracle can rewrite this supported duality-view expression to the underlying relational column, allowing the query to use `SUMMARY_BASE_VEC_IDX` without creating a functional index on the duality view.
+    Query `MOVIES_DV` for the document result, and use an indexed nearest-neighbor subquery to select the matching IDs. The vector index is defined on the relational `MOVIES.EMBEDDING_E5_BASE` column, so the vector expression stays on that column. The outer query still reads the movie documents from `MOVIES_DV`, and no functional index is required on the duality view.
+
+    Keep `VECTOR_DISTANCE` on the relational vector column. Extracting `embedding` from `MOVIES_DV.DATA` inside the distance expression is a JSON expression rather than the indexed column, which can result in a full table scan.
 
     ```sql
-    SELECT JSON_SERIALIZE(m.data PRETTY) AS movie_document
-    FROM movies_dv m
-    ORDER BY VECTOR_DISTANCE(
-               m.data.embedding.vector(),
-               VECTOR_EMBEDDING(
-                 MULTILINGUAL_E5_BASE
-                 USING 'a team of heroes working together to protect others' AS data
-               ),
-               COSINE
-             )
-    FETCH APPROXIMATE FIRST 5 ROWS ONLY
-    WITH TARGET ACCURACY 90;
+    WITH nearest_movies AS (
+      SELECT m.id
+      FROM movies m
+      ORDER BY VECTOR_DISTANCE(
+                 m.embedding_e5_base,
+                 VECTOR_EMBEDDING(
+                   MULTILINGUAL_E5_BASE
+                   USING 'a team of heroes working together to protect others' AS data
+                 ),
+                 COSINE
+               )
+      FETCH APPROXIMATE FIRST 5 ROWS ONLY
+      WITH TARGET ACCURACY 90
+    )
+    SELECT JSON_SERIALIZE(d.data PRETTY) AS movie_document
+    FROM movies_dv d
+    JOIN nearest_movies n
+      ON JSON_VALUE(d.data, '$._id' RETURNING NUMBER) = n.id;
     ```
 
-    The result is read directly from the duality view as one JSON document, while the nearest-neighbor step can use the underlying relational vector column and its HNSW index. Compare these documents with the E5-small results from Lab 2.
+    The result is read from the duality view as one JSON document, while the ID subquery performs the nearest-neighbor search on the indexed relational vector column. Compare these documents with the E5-small results from Lab 2.
 
 ## Task 3: Inspect the execution plan
 
 1. Ask the optimizer to describe the expected execution path for the duality-view search.
 
-    `EXPLAIN PLAN FOR` does not execute the query. It records the estimated operations so you can verify that Oracle rewrites the duality-view vector expression to the underlying E5-base vector column and selects `SUMMARY_BASE_VEC_IDX`.
+    `EXPLAIN PLAN FOR` does not execute the query. It records the estimated operations so you can verify that the `NEAREST_MOVIES` subquery uses the E5-base vector column and selects `SUMMARY_BASE_VEC_IDX` before the IDs are used to read documents from the duality view.
 
 2. Generate the execution plan for the same query.
 
     ```sql
     EXPLAIN PLAN FOR
-    SELECT JSON_SERIALIZE(m.data PRETTY) AS movie_document
-    FROM movies_dv m
-    ORDER BY VECTOR_DISTANCE(
-               m.data.embedding.vector(),
-               VECTOR_EMBEDDING(
-                 MULTILINGUAL_E5_BASE
-                 USING 'a team of heroes working together to protect others' AS data
-               ),
-               COSINE
-             )
-    FETCH APPROXIMATE FIRST 5 ROWS ONLY
-    WITH TARGET ACCURACY 90;
+    WITH nearest_movies AS (
+      SELECT m.id
+      FROM movies m
+      ORDER BY VECTOR_DISTANCE(
+                 m.embedding_e5_base,
+                 VECTOR_EMBEDDING(
+                   MULTILINGUAL_E5_BASE
+                   USING 'a team of heroes working together to protect others' AS data
+                 ),
+                 COSINE
+               )
+      FETCH APPROXIMATE FIRST 5 ROWS ONLY
+      WITH TARGET ACCURACY 90
+    )
+    SELECT JSON_SERIALIZE(d.data PRETTY) AS movie_document
+    FROM movies_dv d
+    JOIN nearest_movies n
+      ON JSON_VALUE(d.data, '$._id' RETURNING NUMBER) = n.id;
     ```
 
 3. Display the execution plan.
@@ -95,41 +109,47 @@ Estimated Time: 30 minutes
     FROM TABLE(DBMS_XPLAN.DISPLAY);
     ```
 
-    Look for `VECTOR INDEX HNSW SCAN` with the index name `SUMMARY_BASE_VEC_IDX`. This confirms that Oracle rewrote the duality-view vector expression and selected the HNSW vector index on `MOVIES.EMBEDDING_E5_BASE`. The exact plan can vary with table size, statistics, and optimizer settings, so verify the operation and index name in the plan output.
+    Look for `VECTOR INDEX HNSW SCAN` with the index name `SUMMARY_BASE_VEC_IDX` in the `NEAREST_MOVIES` query block. This confirms that the semantic search uses the HNSW vector index on `MOVIES.EMBEDDING_E5_BASE`; the outer operation then reads the selected documents from `MOVIES_DV`. The exact plan can vary with table size, statistics, and optimizer settings, so verify the operation and index name in the plan output.
 
 ## Task 4: Combine semantic search with filters
 
 1. Add metadata filters to the semantic search. This query finds movies about a team of heroes, while restricting the results to Action movies released in 2000 or later.
 
-    Apply the structured filters and semantic ranking to the same duality-view document. The filters read fields nested under `movie`, while `embedding` is exposed at the document root. Oracle can rewrite these supported expressions to the underlying `MOVIES` columns and use `SUMMARY_BASE_VEC_IDX` for the vector search.
+    Apply the structured filters to the matching relational rows for the indexed vector search. The vector expression remains on `MOVIES.EMBEDDING_E5_BASE`, so the nearest-neighbor subquery can use `SUMMARY_BASE_VEC_IDX` while the outer query returns fields from `MOVIES_DV`.
 
     ```sql
-    SELECT JSON_VALUE(m.data, '$.movie.title'
+    WITH nearest_movies AS (
+      SELECT m.id
+      FROM movies m
+      WHERE JSON_VALUE(m.data, '$.year' RETURNING NUMBER) >= 2000
+        AND JSON_EXISTS(m.data, '$.genre[*]?(@ == "Action")')
+      ORDER BY VECTOR_DISTANCE(
+                 m.embedding_e5_base,
+                 VECTOR_EMBEDDING(
+                   MULTILINGUAL_E5_BASE
+                   USING 'a team of heroes working together to protect others' AS data
+                 ),
+                 COSINE
+               )
+      FETCH APPROXIMATE FIRST 5 ROWS ONLY
+      WITH TARGET ACCURACY 90
+    )
+    SELECT JSON_VALUE(d.data, '$.movie.title'
                       RETURNING VARCHAR2(200)) AS title,
-           JSON_VALUE(m.data, '$.movie.year'
+           JSON_VALUE(d.data, '$.movie.year'
                       RETURNING NUMBER) AS year,
-           JSON_QUERY(m.data, '$.movie.genre'
+           JSON_QUERY(d.data, '$.movie.genre'
                       RETURNING VARCHAR2(1000)) AS genre
-    FROM movies_dv m
-    WHERE JSON_VALUE(m.data, '$.movie.year' RETURNING NUMBER) >= 2000
-      AND JSON_EXISTS(m.data, '$.movie.genre[*]?(@ == "Action")')
-    ORDER BY VECTOR_DISTANCE(
-               m.data.embedding.vector(),
-               VECTOR_EMBEDDING(
-                 MULTILINGUAL_E5_BASE
-                 USING 'a team of heroes working together to protect others' AS data
-               ),
-               COSINE
-             )
-    FETCH APPROXIMATE FIRST 5 ROWS ONLY
-    WITH TARGET ACCURACY 90;
+    FROM movies_dv d
+    JOIN nearest_movies n
+      ON JSON_VALUE(d.data, '$._id' RETURNING NUMBER) = n.id;
     ```
 
 ## Task 5: Combine text and vector results with INTERSECT
 
 1. Return movies that appear in both the title search for `avengers` and the 20 nearest semantic matches.
 
-    `JSON_TEXTCONTAINS` uses the `TITLE_IDX` JSON search index on `MOVIES.DATA`. The vector branch queries `MOVIES_DV` directly and uses the document’s top-level `embedding` field. Oracle can rewrite that vector expression to `MOVIES.EMBEDDING_E5_BASE`, making `SUMMARY_BASE_VEC_IDX` available without a functional index on the duality view.
+    `JSON_TEXTCONTAINS` uses the `TITLE_IDX` JSON search index on `MOVIES.DATA`. The vector branch returns fields from `MOVIES_DV`, while its ID subquery ranks the relational `EMBEDDING_E5_BASE` column with `SUMMARY_BASE_VEC_IDX`.
 
     ```sql
     -- Text results INTERSECT vector results
@@ -140,13 +160,11 @@ Estimated Time: 30 minutes
       FROM movies
       WHERE JSON_TEXTCONTAINS(data, '$.title', 'avengers', 1)
     ),
-    vector_results AS (
-      SELECT JSON_VALUE(m.data, '$.movie.title' RETURNING VARCHAR2(200)) AS title,
-             JSON_VALUE(m.data, '$.movie.year' RETURNING NUMBER) AS year,
-             JSON_QUERY(m.data, '$.movie.genre' RETURNING VARCHAR2(1000)) AS genre
-      FROM movies_dv m
+    nearest_movies AS (
+      SELECT m.id
+      FROM movies m
       ORDER BY VECTOR_DISTANCE(
-                 m.data.embedding.vector(),
+                 m.embedding_e5_base,
                  VECTOR_EMBEDDING(
                    MULTILINGUAL_E5_BASE
                    USING 'a team of heroes working together to protect others' AS data
@@ -155,6 +173,16 @@ Estimated Time: 30 minutes
                )
       FETCH APPROXIMATE FIRST 20 ROWS ONLY
       WITH TARGET ACCURACY 90
+    ),
+    vector_results AS (
+      SELECT JSON_VALUE(d.data, '$.movie.title' RETURNING VARCHAR2(200)) AS title,
+             JSON_VALUE(d.data, '$.movie.year' RETURNING NUMBER) AS year,
+             JSON_QUERY(d.data, '$.movie.genre' RETURNING VARCHAR2(1000)) AS genre
+      FROM movies_dv d
+      WHERE JSON_VALUE(d.data, '$._id' RETURNING NUMBER) IN (
+        SELECT id
+        FROM nearest_movies
+      )
     )
     SELECT title, year, genre
     FROM text_results
