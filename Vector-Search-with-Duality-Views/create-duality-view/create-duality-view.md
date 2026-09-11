@@ -48,7 +48,8 @@ Estimated Time: 30 minutes
     Query `MOVIES_DV` directly and extract its top-level `embedding` field as a SQL `VECTOR`. The E5-base model produces 768-dimensional `FLOAT32` vectors, so specify that type explicitly in `JSON_VALUE`.
 
     ```sql
-    SELECT JSON_SERIALIZE(m.data PRETTY) AS movie_document
+    SELECT /*+ VECTOR_INDEX_TRANSFORM(m SUMMARY_BASE_VEC_IDX) */
+           JSON_SERIALIZE(m.data PRETTY) AS movie_document
     FROM movies_dv m
     ORDER BY VECTOR_DISTANCE(
                JSON_VALUE(
@@ -78,7 +79,8 @@ Estimated Time: 30 minutes
 
     ```sql
     EXPLAIN PLAN FOR
-    SELECT JSON_SERIALIZE(m.data PRETTY) AS movie_document
+    SELECT /*+ VECTOR_INDEX_TRANSFORM(m SUMMARY_BASE_VEC_IDX) */
+           JSON_SERIALIZE(m.data PRETTY) AS movie_document
     FROM movies_dv m
     ORDER BY VECTOR_DISTANCE(
                JSON_VALUE(
@@ -113,7 +115,8 @@ Estimated Time: 30 minutes
 
     ```sql
     WITH nearest_movies AS (
-      SELECT m.id
+      SELECT /*+ VECTOR_INDEX_TRANSFORM(m SUMMARY_BASE_VEC_IDX) */
+             m.id
       FROM movies m
       WHERE JSON_VALUE(m.data, '$.year' RETURNING NUMBER) >= 2000
         AND JSON_EXISTS(m.data, '$.genre[*]?(@ == "Action")')
@@ -155,7 +158,8 @@ Estimated Time: 30 minutes
       WHERE JSON_TEXTCONTAINS(data, '$.title', 'avengers', 1)
     ),
     nearest_movies AS (
-      SELECT m.id
+      SELECT /*+ VECTOR_INDEX_TRANSFORM(m SUMMARY_BASE_VEC_IDX) */
+             m.id
       FROM movies m
       ORDER BY VECTOR_DISTANCE(
                  m.embedding_e5_base,
