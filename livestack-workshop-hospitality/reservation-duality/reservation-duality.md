@@ -45,6 +45,11 @@ Thomas's application needs a payload with the reservation and its nightly-charge
 
 Estimated Time: **10 minutes**
 
+<video controls width="100%">
+  <source src="https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/livestack/Videos/Hospitality/Workshop/Scene-03-Hospitality.mp4">
+  Your browser does not support the video tag.
+</video>
+
 > **SQL Worksheet reminder:** See [Getting Started Task 2: Open SQL Worksheet](?lab=getting-started#Task2:OpenSQLWorksheet) for the steps to paste and run SQL.
 
 ## Task 1: Store flexible application data as JSON
@@ -151,7 +156,7 @@ Thomas now needs a collection of application documents. Unlike the JSON column i
 
 ## Task 3: Read a guest document from relational data
 
-Thomas now tests the document shape his application can consume directly.
+Thomas inspects a reservation document for the guest application. The reservation is the document root; the guest identifier and nightly-charge lines come from the related relational rows.
 
 1. Run this query:
 

@@ -34,6 +34,16 @@ Help Bob follow these connections with SQL/PGQ, then open Graph Studio, Oracle D
 
 Estimated Time: **10 minutes**
 
+<video controls width="100%">
+  <source src="https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/livestack/Videos/Telecommunication/Workshop/Scene-05-Activation-Fraud-Network-Branded.mp4">
+  Your browser does not support the video tag.
+</video>
+
+<video controls width="100%">
+  <source src="https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/livestack/Videos/Telecommunication/Workshop/Scene-06-Graph-Studio-Branded.mp4">
+  Your browser does not support the video tag.
+</video>
+
 ### Hands-on Scenario
 
 Help Bob investigate `ORD-8841`, then find other orders that share its identifiers.
@@ -245,7 +255,7 @@ Start from suspicious service order `ORD-8841` and trace the connected entities 
 
     ![Trace activation evidence across four hops](images/sql-graph-four-hop.png)
 
-    RELATIONSHIP_HOPS shows the entity's level in the search. A value of `1` means the entity is directly connected to `ORD-8841`; a value of `2` means the query reached it after one intermediate vertex; values `3` and `4` show deeper connections.
+    `RELATIONSHIP_HOPS` is the number of relationships in the path from `ORD-8841` to the returned entity. One hop is a direct connection; two hops include one intermediate vertex. The same entity may appear at more than one hop count.
 
     **Expected output: High Risk Activation Fraud Entities**
 

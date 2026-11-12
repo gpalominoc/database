@@ -45,6 +45,11 @@ Thomas's application needs a document with the service order and its monthly ser
 
 Estimated Time: **10 minutes**
 
+<video controls width="100%">
+  <source src="https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/livestack/Videos/Telecommunication/Workshop/Scene-03-JSON-Application-Model-Branded.mp4">
+  Your browser does not support the video tag.
+</video>
+
 ### Hands-on Scenario
 
 Work with Thomas to choose how the subscriber application stores optional fields, drafts, and shared service orders.
@@ -183,7 +188,7 @@ Thomas now tests the document shape his application can consume directly.
 
     ![Read a subscriber document from relational data](images/sql-duality-document.png)
 
-    **Expected output:**
+    **Expected output:** One service-order JSON document containing the order identifier, subscriber identifier, status and nested order lines.
 
 2. Expand the document in SQL Worksheet.
     Oracle builds this document from the existing service order and line rows. Check `_id`, `subscriberId`, `status`, totals, timestamps, and `items` in the returned JSON.

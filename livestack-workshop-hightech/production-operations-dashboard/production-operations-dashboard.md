@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Jessica Chan, Seer HighTech’s DBA, starts with the quality team’s morning question: **which component needs attention first, and which production orders and customer sites may be affected?**
+Jessica Chan, Seer High-Tech’s DBA, starts with the quality team’s morning question: **which component needs attention first, and which production orders and customer sites may be affected?**
 
 Build Jessica’s dashboard query from relational alerts, JSON orders, component vectors, and plant locations.
 
@@ -10,13 +10,20 @@ Build Jessica’s dashboard query from relational alerts, JSON orders, component
 
 ### Objectives
 
-- Explain how one database query combines the data needed for a production-quality review.
-- Run one query that combines relational, vector, JSON, and spatial database capabilities.
-- Modify the query to investigate a different production-quality question and explain the change in results.
+* Explain how one database query combines the data needed for a production-quality review.
+* Run one query that combines relational, vector, JSON, and spatial database capabilities.
+* Modify the query to investigate a different production-quality question and explain the change in results.
 
 Estimated Time: **10 minutes**
 
-> **SQL Worksheet reminder:** See [Getting Started Task 2: Open SQL Worksheet](?lab=getting-started#Task2:OpenSQLWorksheet) for the steps to paste and run SQL.
+<video controls width="100%">
+  <source src="https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/livestack/Videos/High-Tech/Workshop/Scene-02-Lab-1-Converged-High-Tech-Dashboard-Query.mp4">
+  Your browser does not support the video tag.
+</video>
+
+> **SQL Worksheet reminder:** See
+> [Getting Started Task 2: Open SQL Worksheet][link-1] for the steps to paste
+> and run SQL.
 
 ## Task 1: Run a converged production investigation
 
@@ -24,12 +31,12 @@ Run the query to find components with severe quality alerts.
 
 The query combines four data types:
 
-- **Relational:** Quality alerts and observation-to-component links calculate quality impact.
-- **Vector:** `VECTOR_DISTANCE` ranks component embeddings against the investigation phrase.
-- **JSON:** `JSON_TABLE` projects line items from `PRODUCTION_ORDERS_DV` into rows to count order activity.
-- **Spatial:** `SDO_GEOM.SDO_DISTANCE` finds the closest plant to New York Electronics Region.
+* **Relational:** Calculate quality impact from alerts and the links between observations and components.
+* **Vector:** `VECTOR_DISTANCE` ranks component embeddings against the investigation phrase.
+* **JSON:** `JSON_TABLE` reads line items from `PRODUCTION_ORDERS_DV` as rows so the query can count order activity.
+* **Spatial:** `SDO_GEOM.SDO_DISTANCE` finds the closest plant to New York Electronics Region.
 
-1. Open SQL Worksheet as `LLUSER`. 
+1. Open SQL Worksheet as `LLUSER`.
 
 2. Run the query; its comments identify each data type:
 
@@ -176,7 +183,7 @@ electronics assembly capacity and semiconductor availability
 Run the query again and compare the top rows.
 
 1. Which components moved into or out of the top ten?
-2. Which components still have high relational quality impact but a lower semantic similarity to the new question?
+2. Which components still have high quality impact in the relational data but match the new question less closely?
 3. Which components have the most active production orders or units that may need review?
 
 Which component would Jessica investigate first now?
@@ -189,18 +196,21 @@ Next, use JSON Relational Duality to expose the same production order data as JS
 
 ## Application example
 
-The [HighTech LiveStack demo](https://livelabs.oracle.com/ords/r/dbpm/livelabs/view-workshop?wid=4461) shows these signals in a product and commitment control tower.
+The [High-Tech LiveStack demo][link-2] shows these signals in a product and commitment control tower.
 
-![LiveStack HighTech Demo: Product & Commitment Control Tower](images/demo-dashboard.jpg)
+![LiveStack High-Tech Demo: Product & Commitment Control Tower](images/demo-dashboard.jpg)
 
-*LiveStack HighTech Demo: Product & Commitment Control Tower*
+*LiveStack High-Tech Demo: Product & Commitment Control Tower*
 
-![LiveStack HighTech Demo: Product & Commitment Control Tower](images/demo-dashboard-charts.jpg)
+![LiveStack High-Tech Demo: Product & Commitment Control Tower](images/demo-dashboard-charts.jpg)
 
-*LiveStack HighTech Demo: Product & Commitment Control Tower*
+*LiveStack High-Tech Demo: Product & Commitment Control Tower*
 
 ## Acknowledgements
 
 * **Author** - Matt Kowalik
 * **Contributor** - Kevin Lazarz
 * **Last Updated By/Date** - Matt Kowalik, September 2026
+
+[link-1]: ?lab=getting-started#Task2:OpenSQLWorksheet
+[link-2]: https://livelabs.oracle.com/ords/r/dbpm/livelabs/view-workshop?wid=4461

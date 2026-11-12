@@ -2,7 +2,7 @@
 
 ```quiz-config
 passing: 75
-badge: images/livestack-hospitality-badge.svg
+badge: images/livestack-badge-hospitality.png
 ```
 
 ## Introduction
@@ -15,6 +15,11 @@ Use this quiz to check how the database results support the Seer Hotels tasks yo
 - Earn the workshop badge by answering the scored questions.
 
 Estimated Time: **3 minutes**
+
+<video controls width="100%">
+  <source src="https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/livestack/Videos/Hospitality/Workshop/Scene-11-Hospitality.mp4">
+  Your browser does not support the video tag.
+</video>
 
 ## Task 1: Answer the quiz questions
 
@@ -29,7 +34,7 @@ Estimated Time: **3 minutes**
     > A duality view presents relational rows as a JSON document. Applications get the payload they need, while analysts still use SQL, keys, joins, and database controls against the same source.
 
     Q: In the vector lab, what does the similarity score help an analyst do?
-    - Prove that a guest concern establishes wrongdoing.
+    - Confirm that a guest’s booked room fails to meet their accessibility requirements.
     - Replace the stay offer and reservation tables with embeddings only.
     * Rank stay offers by how closely they match the search phrase.
     - Count how many rows exist in each hospitality table.

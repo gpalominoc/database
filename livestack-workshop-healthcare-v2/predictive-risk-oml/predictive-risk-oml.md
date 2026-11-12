@@ -39,6 +39,11 @@ In this lab, you follow Otto from training data through model creation, scenario
 
 Estimated Time: **10 minutes**
 
+<video controls width="100%">
+  <source src="https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/livestack/Videos/Healthcare/Workshop/Scene-08-Care-Demand-Risk-Pickup-Recording.mp4">
+  Your browser does not support the video tag.
+</video>
+
 ### Operating Story
 
 | Step | Healthcare focus |
@@ -282,11 +287,30 @@ This task is optional. You have completed the required SQL workflow in Tasks 1-3
     | Prediction type | `Classification`         |
     | Case ID         | `TRAINING_ID`            |
 
-    Start the experiment and wait for the model leaderboard (this can take between 5-10 minutes).
+
+    **Note:** The Predict, Prediction Type, and Case ID fields become available
+    after a data source has been entered. Select `SURGE_LABEL`,
+    `Classification`, and `TRAINING_ID`, respectively.
+
+    To enter the **Data Source** value:
+
+    1. Enter *Care Demand Risk Test* in the Name field.
+    2. Select the magnifying-glass icon next to **Data Source**.
+
+        ![Hospitality classification experiment settings](images/data-source-one.png)
+
+    3. In the **Select Table** window, select *LLUSER* from the **Schema** list.
+    4. Select `HC_DEMAND_TRAINING` from the **Table** list.
+
+        ![Hospitality classification experiment settings](images/data-source-two.png)
+
+    5. Select **OK**.
+
+4. Start the experiment and wait for the model leaderboard (this can take between 5-10 minutes).
 
     ![startml](images/startml.png)
 
-4. Review the leaderboard and model details.
+5. Review the leaderboard and model details.
 
     ![AutoML leaderboard for the completed care-demand experiment](images/leaderboard.png)
 

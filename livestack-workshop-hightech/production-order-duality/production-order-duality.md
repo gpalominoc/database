@@ -2,34 +2,38 @@
 
 ## Introduction
 
-Thomas Brune, Seer HighTech’s application developer, needs production-order JSON documents for web and mobile screens, including order lines and optional app fields.
+Thomas Brune, Seer High-Tech’s application developer, needs JSON documents for production orders in web and mobile screens. The documents must include order lines and optional application fields.
 
-Jessica, the DBA, helps him compare JSON columns, JSON collections, and JSON Relational Duality Views while retaining SQL access, transactions, and database controls.
+Jessica, the DBA, helps him compare JSON columns, JSON collections and JSON Relational Duality Views while keeping SQL access, transactions and database controls in place.
 
 ![Thomas introduces the JSON production-order application lab](images/thomas.png)
 
 <details>
 <summary><strong>Key terms: JSON columns, JSON collections, and JSON Relational Duality</strong></summary>
 
-> - A **JSON column** stores flexible attributes alongside a table’s typed columns, keys, and constraints.
->
-> - A **JSON collection** stores documents in a `JSON`-typed `DATA` column, with a top-level `_id` identifying each document.
->
-> - **JSON Relational Duality** exposes relational rows as JSON documents without a separate copy. The rows retain their database constraints.
->
+> * A **JSON column** stores flexible attributes alongside a table’s typed columns, keys, and constraints.
+> * A **JSON collection** stores documents in a `JSON`-typed `DATA` column, with a top-level `_id` identifying each document.
+> * **JSON Relational Duality** exposes relational rows as JSON documents without a separate copy. The rows retain their database constraints.
 
 </details>
 
 ### Objectives
 
-- Store flexible application attributes as JSON in a relational table.
-- Create and query a JSON Collection Table of production order documents.
-- Read and update relational production order data through `PRODUCTION_ORDERS_DV`.
-- Compare the three JSON approaches and choose the right one for an application feature.
+* Store flexible application attributes as JSON in a relational table.
+* Create and query a JSON Collection Table of production order documents.
+* Read and update relational production order data through `PRODUCTION_ORDERS_DV`.
+* Compare the three JSON approaches and choose the right one for an application feature.
 
 Estimated Time: **10 minutes**
 
-> **SQL Worksheet reminder:** See [Getting Started Task 2: Open SQL Worksheet](?lab=getting-started#Task2:OpenSQLWorksheet) for the steps to paste and run SQL.
+<video controls width="100%">
+  <source src="https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/livestack/Videos/High-Tech/Workshop/Scene-03-Lab-2-JSON-High-Tech-Production-Order-Application-Model.mp4">
+  Your browser does not support the video tag.
+</video>
+
+> **SQL Worksheet reminder:** See
+> [Getting Started Task 2: Open SQL Worksheet][link-1] for the steps to paste
+> and run SQL.
 
 Here is the document Thomas’s screen needs:
 
@@ -169,13 +173,14 @@ Thomas now reads a document assembled from the existing relational production or
 
 2. Expand the document in SQL Worksheet.
 
-    Find `_id`, `customerSiteId`, `status`, totals, timestamps, and the `items` array.
+    Find `_id`, `customerSiteId`, `status`, totals, timestamps, and the `items`
+    array.
 
     > **Note:** Find `_metadata.etag` here too; the application uses it to detect concurrent updates.
 
 ## Task 4: Enable document inserts and updates
 
-The existing `PRODUCTION_ORDERS_DV` lets an application update production order documents. Here, you also allow inserts. Oracle still enforces the table keys and constraints. An application granted access only to the view can use only the fields and write operations that the view allows.
+The existing `PRODUCTION_ORDERS_DV` allows applications to update production-order documents. In this task, you also enable inserts. Oracle continues to enforce table keys and constraints. An application with access only to the view can use only the fields and write operations allowed by that view.
 
 1. Check the current document-write capabilities.
 
@@ -250,7 +255,8 @@ Thomas inserts one nested document, then checks the relational rows Jessica sees
 
 1. Insert the supplied workshop production order document.
 
-    The `INSERT` writes through `PRODUCTION_ORDERS_DV` into relational tables. It uses reserved order ID `900001` and line ID `990001`, with customer site, plant, and component IDs all `1`.
+    The `INSERT` writes through `PRODUCTION_ORDERS_DV` into relational tables.
+    It uses reserved order ID `900001` and line ID `990001`, with customer site, plant, and component IDs all `1`.
 
     The sandbox loader supplies those referenced rows.
 
@@ -352,7 +358,9 @@ Jessica extracts JSON values from `PRODUCTION_ORDERS_DV` as SQL columns, a step 
 
 1. Run this SQL/JSON projection query:
 
-    `JSON_VALUE` extracts the order ID, status, and customer site identifier. The query joins that identifier to `CUSTOMER_SITES` to retrieve the contact email.
+    `JSON_VALUE` extracts the order ID, status, and customer site identifier.
+    The query joins that identifier to `CUSTOMER_SITES` to retrieve the contact
+    email.
 
     ```sql
     <copy>
@@ -394,10 +402,14 @@ Jessica extracts JSON values from `PRODUCTION_ORDERS_DV` as SQL columns, a step 
 | JSON Collection Table | The application owns independent documents. | Saved order drafts. | One document per `DATA` row. |
 | JSON Relational Duality View | Existing relational data needs a document interface. | Read or write an order with its lines. | `PRODUCTION_ORDERS` and `PRODUCTION_ORDER_LINES`; the view defines the JSON shape. |
 
-For the shared production-order data, Thomas chooses the duality view: the application gets JSON while Jessica retains SQL access and relational constraints.
+For the shared production-order data, Thomas chooses the duality view: the
+application gets JSON while Jessica retains SQL access and relational
+constraints.
 
 ## Acknowledgements
 
 * **Author** - Matt Kowalik
 * **Contributor** - Kevin Lazarz
 * **Last Updated By/Date** - Matt Kowalik, September 2026
+
+[link-1]: ?lab=getting-started#Task2:OpenSQLWorksheet

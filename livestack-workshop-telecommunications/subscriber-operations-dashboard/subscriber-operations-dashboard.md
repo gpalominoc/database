@@ -16,6 +16,11 @@ Build her dashboard query by combining service alerts, plan-description vectors,
 
 Estimated Time: **10 minutes**
 
+<video controls width="100%">
+  <source src="https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/livestack/Videos/Telecommunication/Workshop/Scene-02-Converged-Dashboard-Branded.mp4">
+  Your browser does not support the video tag.
+</video>
+
 ### Hands-on Scenario
 
 You are Jessica. Use the first dashboard row to explain which plan the support team should review first.
@@ -30,8 +35,8 @@ The query combines four data types:
 
 - **Relational:** `SERVICE_ALERTS_V`, service plan mentions, and telecommunications views summarize reported service problems and their impact.
 - **Vector:** `PLAN_EMBEDDINGS` and `VECTOR_DISTANCE` find service plans related by meaning to the investigation phrase.
-- **JSON:** `SERVICE_ORDERS_DV` is read as a document, and `JSON_TABLE` projects its nested line items into rows so service order activity can be counted.
-- **Spatial:** `SDO_GEOM.SDO_DISTANCE` finds the closest network site to the high-demand New York Network Region using latitude and longitude information stored as spatial geometries that can be converted to GeoJSON.
+- **JSON:** `JSON_TABLE` reads nested line items from `SERVICE_ORDERS_DV` as rows so the query can count service-order activity.
+- **Spatial:** `SDO_GEOM.SDO_DISTANCE` finds the closest network site to New York Network Region. The stored location can also be converted to GeoJSON for a map.
 
 1. Open SQL Worksheet as `LLUSER`. 
 
@@ -165,7 +170,7 @@ The query combines four data types:
 
     ![Run a converged service investigation](images/sql-dashboard.png)
 
-3. Review the result as the service plan-level data behind Jessica's dashboard. Each row combines service-alert severity, semantic match, service order activity, and network site location. This gives the dashboard a ranked service plan table and the details a support analyst needs when deciding what to review.
+3. Review the ranked plans. Compare each plan’s alert severity, match to the search phrase, order activity and regional network-site information.
 
     Each row should include alert impact, semantic similarity, order activity, and regional site context. The query returns up to ten plans. Inspect the actual ranking after the embeddings are created; a missing embedding or an empty regional site set can make the result incomplete.
 
@@ -187,7 +192,7 @@ Run the query again and compare the top rows.
 
 1. Which service plans moved into or out of the top ten?
 2. Which service plans still have high service-alert severity but a lower similarity to the new question?
-3. Does the service order activity make you more or less concerned about the operational impact?
+3. Which plans have the most pending or confirmed activation orders that may need review?
 
 The query sorts by similarity first, so changing the question changes the review order. Service impact breaks ties. Jessica can ask a different question using the same query and service plan data.
 

@@ -2,38 +2,48 @@
 
 ## Introduction
 
-Gilly Bourne, Seer HighTech’s AI engineer, needs to answer **which customer sites may be affected by a power-module leakage-current concern?** The inspection wording may differ from the component descriptions.
+Gilly Bourne, Seer High-Tech’s AI engineer, needs to answer **which customer sites may be affected by a power-module leakage-current concern?** The inspection wording may differ from the component descriptions.
 
 Help Gilly turn matches by meaning into a customer follow-up list.
 
-![Gilly: HighTech lab banner](images/gilly.png)
+![Gilly: High-Tech lab banner](images/gilly.png)
 
 <details>
 <summary><strong>Key terms: embedding, vector, vector distance, and semantic search</strong></summary>
 
-> - An **embedding** represents text meaning as numbers, placing related descriptions near each other even when their wording differs.
+> * An **embedding** represents text meaning as numbers, placing related
+>   descriptions near each other even when their wording differs.
 >
-> - An **ONNX embedding model** turns text into vectors. ONNX (Open Neural Network Exchange) is a portable model format that Oracle AI Database can load and run.
+> * An **ONNX embedding model** turns text into vectors. ONNX (Open Neural
+>   Network Exchange) is a portable model format that Oracle AI Database can
+>   load and run.
 >
-> - A **vector** stores an embedding beside the component row it describes.
+> * A **vector** stores an embedding beside the component row it describes.
 >
-> - **Vector distance** measures similarity: smaller distances indicate closer meanings.
+> * **Vector distance** measures similarity: smaller distances indicate closer meanings.
 >
-> - **Semantic search** finds matches by meaning rather than exact words.
+> * **Semantic search** finds matches by meaning rather than exact words.
 
 </details>
 
 ### Objectives
 
-- Check the embedding model Gilly needs for semantic search.
-- Create a vector from component data inside the database.
-- Search for components that match a production-quality concern.
-- Turn component matches into a customer follow-up list.
-- Explain why vector search belongs beside HighTech data and access controls.
+* Check the embedding model Gilly needs for semantic search.
+* Create a vector from component data inside the database.
+* Search for components that match a production-quality concern.
+* Turn component matches into a customer follow-up list.
+* Explain why vector search belongs beside High-Tech data and access controls.
 
 Estimated Time: **10 minutes**
 
-> **SQL Worksheet reminder:** See [Getting Started Task 2: Open SQL Worksheet](?lab=getting-started#Task2:OpenSQLWorksheet) for the steps to paste and run SQL.
+<video controls width="100%">
+  <source src="https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/livestack/Videos/High-Tech/Workshop/Scene-04-Lab-3-Search-High-Tech-Components-by-Meaning.mp4">
+  Your browser does not support the video tag.
+</video>
+
+> **SQL Worksheet reminder:** See
+> [Getting Started Task 2: Open SQL Worksheet][link-1] for the steps to paste
+> and run SQL.
 
 ## Task 1: Check the embedding model
 
@@ -55,13 +65,15 @@ Jessica has loaded an embedding model. Check that Gilly can use it.
 
     ![Available ADMIN embedding model in SQL Worksheet](images/sql-embedding-model.jpg)
 
-    Look for `ADMIN.ALL_MINILM_L12_V2` with function `EMBEDDING`. It produces 384-dimensional vectors.
+    Look for `ADMIN.ALL_MINILM_L12_V2` with function `EMBEDDING`. It produces
+    384-dimensional vectors.
 
-    The next task calls this model with `VECTOR_EMBEDDING(...)`; component text stays in the database.
+    The next task calls this model with `VECTOR_EMBEDDING(...)`; component text
+    stays in the database.
 
 ## Task 2: Create a component vector
 
-Each component is short enough for one vector. Gilly combines its name, category, and subcategory.
+Each component description is short enough for one vector. Gilly combines its name, category and subcategory.
 
 1. Review the text Gilly will embed:
 
@@ -78,7 +90,8 @@ Each component is short enough for one vector. Gilly combines its name, category
     </copy>
     ```
 
-    Price and dates are omitted because they do not describe what the component is.
+    Price and dates are omitted because they do not describe what the component
+    is.
 
 2. Add a vector column to `COMPONENTS`:
 
@@ -88,7 +101,8 @@ Each component is short enough for one vector. Gilly combines its name, category
     </copy>
     ```
 
-    The column has 384 dimensions because `ALL_MINILM_L12_V2` produces 384-dimensional vectors.
+    The column has 384 dimensions because `ALL_MINILM_L12_V2` produces
+    384-dimensional vectors.
 
 3. Create the component vectors inside Oracle Database:
 
@@ -118,7 +132,9 @@ Each component is short enough for one vector. Gilly combines its name, category
 
     ![Component rows populated with vector embeddings](images/sql-vector-values.png)
 
-    > **Note:** Longer documents may need **chunking**: splitting sections into separate vectors so each can match a different question. These short component rows do not need it.
+    > **Note:** Longer documents may need **chunking**: splitting the text into
+    > sections and creating a vector for each section so it can match a
+    > different question. These short component rows do not need it.
 
 ## Task 3: Test the component vector
 
@@ -126,7 +142,8 @@ Gilly tests whether the vectors find components related to the leakage-current c
 
 1. Run the following query:
 
-    This query embeds the concern, compares it with `COMPONENTS.COMPONENT_EMBEDDING`, and sorts by ascending cosine distance.
+    This query embeds the concern, compares it with
+    `COMPONENTS.COMPONENT_EMBEDDING`, and sorts by ascending cosine distance.
 
     ```sql
     <copy>
@@ -172,7 +189,8 @@ Gilly tests whether the vectors find components related to the leakage-current c
 
 Gilly joins component matches to customer orders, limiting follow-up to planned, released, and in-production orders.
 
-1. Run the following query for the concern `power control module with stable MOSFET switching and low leakage current`:
+1. Run the following query for the concern
+    `power control module with stable MOSFET switching and low leakage current`:
 
     ```sql
     <copy>
@@ -212,7 +230,8 @@ Gilly joins component matches to customer orders, limiting follow-up to planned,
 
     ![component customer follow-up](images/sql-vector-customer-sites.png)
 
-    The joins connect the ranked components to order lines, production orders, and customer sites.
+    The joins connect the ranked components to order lines, production orders,
+    and customer sites.
 
 2. Identify customer sites for Gilly’s follow-up list.
 
@@ -223,3 +242,5 @@ Gilly joins component matches to customer orders, limiting follow-up to planned,
 * **Author** - Matt Kowalik
 * **Contributor** - Kevin Lazarz
 * **Last Updated By/Date** - Matt Kowalik, September 2026
+
+[link-1]: ?lab=getting-started#Task2:OpenSQLWorksheet

@@ -2,39 +2,42 @@
 
 ## Introduction
 
-Bob Green, Seer HighTech’s graph specialist, is investigating production order `PO-8841`. Shared material lots, inspection records, machines, and suppliers may connect it to other orders.
+Bob Green, Seer High-Tech’s graph specialist, is investigating production order `PO-8841`. Shared material lots, inspection records, machines, and suppliers may connect it to other orders.
 
 You will follow those connections with SQL/PGQ, then explore the same relationships in Graph Studio. SQL returns tables to compare; Graph Studio displays nodes, edges, and paths.
 
-![Bob: HighTech lab banner](images/bob.png)
+![Bob: High-Tech lab banner](images/bob.png)
 
 <details>
 <summary><strong>Key terms: property graph, vertex, edge, and SQL Property Graph Queries (SQL/PGQ)</strong></summary>
 
-> - A **property graph** represents entities and their connections, with properties attached to both.
->
-> - A **vertex** is an entity such as an order, lot, or supplier. Here, vertices have the `entity` label and properties such as risk score and material value.
->
-> - An **edge** connects two vertices. Here, edges have the `related_to` label and a relationship-type property.
->
-> - A **hop** crosses one edge: order to lot is one hop; order to lot to another order is two. Hops measure graph steps, not physical distance or elapsed time.
->
-> - **SQL Property Graph Queries (SQL/PGQ)** express connection patterns in SQL over the existing relational data.
+> * A **property graph** represents entities and their connections, with properties attached to both.
+> * A **vertex** is an entity such as an order, lot, or supplier. Here, vertices have the `entity` label and properties such as risk score and material value.
+> * An **edge** connects two vertices. Here, edges have the `related_to` label and a relationship-type property.
+> * A **hop** crosses one edge: order to lot is one hop; order to lot to another order is two. Hops measure graph steps, not physical distance or elapsed time.
+> * **SQL Property Graph Queries (SQL/PGQ)** express connection patterns in SQL over the existing relational data.
 
 </details>
 
 ### Objectives
 
-- Identify vertices and edges in a property graph.
-- Follow connections from a flagged production order.
-- Find production order pairs that share traceability records.
-- Open Graph Studio from Database Actions.
-- Import and run the HighTech production-quality-network notebook.
-- Explain the result in terms a production analyst can act on.
+* Identify vertices and edges in a property graph.
+* Follow connections from a flagged production order.
+* Find production order pairs that share traceability records.
+* Open Graph Studio from Database Actions.
+* Import and run the High-Tech production-quality-network notebook.
+* Explain the results so a production analyst can decide what to investigate next.
 
 Estimated Time: **10 minutes**
 
-> **SQL Worksheet reminder:** See [Getting Started Task 2: Open SQL Worksheet](?lab=getting-started#Task2:OpenSQLWorksheet) for the steps to paste and run SQL.
+<video controls width="100%">
+  <source src="https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/livestack/Videos/High-Tech/Workshop/Scene-05-Lab-4-Trace-a-High-Tech-Production-Quality-Network.mp4">
+  Your browser does not support the video tag.
+</video>
+
+> **SQL Worksheet reminder:** See
+> [Getting Started Task 2: Open SQL Worksheet][link-1] for the steps to paste
+> and run SQL.
 
 ## Task 1: Follow a flagged production order with SQL
 
@@ -280,9 +283,14 @@ Bob widens the investigation: **which order pairs share a material lot, supplier
 
 2. Find an order pair linked by a shared traceability record.
 
-    Check its relationship types and `COMBINED_RISK`. Bob can investigate the pair together, but a shared record does not prove both orders are defective.
+    Check the relationship types and `COMBINED_RISK`. Bob can investigate the two orders together, but a shared record does not prove that both orders are defective.
 
 ## Task 5: Visualize the relationship using Oracle Graph Studio
+
+<video controls width="100%">
+  <source src="https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/livestack/Videos/High-Tech/Workshop/Scene-06-Lab-4-Visualize-High-Tech-Quality-in-Graph-Studio.mp4">
+  Your browser does not support the video tag.
+</video>
 
 Bob opens Graph Studio to follow the `PO-8841` paths and shared material lots in an interactive network.
 
@@ -292,19 +300,19 @@ Bob opens Graph Studio to follow the `PO-8841` paths and shared material lots in
 
 2. On the **Development** tab, select **Graph Studio** from the left-side tool list and click **Open**.
 
-3. If prompted, sign in with the `LLUSER` and the workshop password supplied.
+3. If prompted, sign in as `LLUSER` using the supplied workshop password.
 
 4. Confirm that the Graph Studio home page opens. The landing page provides **Graphs**, **Notebooks**, **Templates**, and **Jobs**.
 
     ![Graph Studio overview page signed in as LLUSER](images/graph-studio-overview.png)
 
-## Task 6: Download and import the HighTech notebook
+## Task 6: Download and import the High-Tech notebook
 
 1. Download [hightech-production-quality-graph-studio.dsnb](files/hightech-production-quality-graph-studio.dsnb).
 
     If the notebook opens in your browser instead of downloading, right-click the link and select **Save Link As**.
 
-2. In Graph Studio, click **Notebooks** in the landing page.
+2. In Graph Studio, click **Notebooks** on the landing page.
 
     ![Graph Studio Notebooks page for LLUSER](images/graph-notebooks.png)
 
@@ -312,9 +320,10 @@ Bob opens Graph Studio to follow the `PO-8841` paths and shared material lots in
 
     ![Graph Studio notebook import dialog](images/graph-import-dialog.png)
 
-4. Drag the downloaded notebook into the import window or browse to it. Confirm the filename, select **Import**, then open **Production Quality Network**.
+4. Drag the downloaded notebook into the import window or browse to it. Confirm
+    the filename, select **Import**, then open **Production Quality Network**.
 
-    ![HighTech notebook selected for import](images/graph-import-file.png)
+    ![High-Tech notebook selected for import](images/graph-import-file.png)
 
 ## Task 7: Run and interpret the Graph Studio notebook
 
@@ -342,7 +351,7 @@ Find the paths from `LOT-SEMI-91A7` to `PO-8841`, `PO-5077`, and `PO-1190`. Use 
 
 ### Optional graph-algorithms extension
 
-The companion [material flow graph notebook](https://github.com/oracle-livelabs/database/blob/main/livestack-workshop-hightech/production-quality-network/files/getting-started-material-flow-graph.dsnb) lets you practice PGX algorithms: paths, degree counts, PageRank, shortest paths, personalized PageRank, and hop distance. It uses `MATERIAL_FLOW_GRAPH` to connect work centers through material transfers, separately from the `PRODUCTION_QUALITY_NETWORK` used in this lab. A connection shows where material can move; it does not establish the cause of a quality issue.
+The companion [material flow graph notebook][link-2] lets you practice PGX algorithms: paths, degree counts, PageRank, shortest paths, personalized PageRank, and hop distance. It uses `MATERIAL_FLOW_GRAPH` to connect work centers through material transfers, separately from the `PRODUCTION_QUALITY_NETWORK` used in this lab. A connection shows where material can move; it does not establish the cause of a quality issue.
 
 ## Appendix: Create the Property Graph
 
@@ -409,18 +418,22 @@ CREATE PROPERTY GRAPH production_quality_network
 
 ## Application example
 
-The [HighTech LiveStack demo](https://livelabs.oracle.com/ords/r/dbpm/livelabs/view-workshop?wid=4461) shows a two-hop graph and a SQL/PGQ query result.
+The [High-Tech LiveStack demo][link-3] shows a two-hop graph and a SQL/PGQ query result.
 
-![LiveStack HighTech Demo: Product Signal Graph](images/demo-network-overview.jpg)
+![LiveStack High-Tech Demo: Product Signal Graph](images/demo-network-overview.jpg)
 
-*LiveStack HighTech Demo: Product Signal Graph*
+*LiveStack High-Tech Demo: Product Signal Graph*
 
-![LiveStack HighTech Demo: Product Signal Graph](images/demo-network-query.jpg)
+![LiveStack High-Tech Demo: Product Signal Graph](images/demo-network-query.jpg)
 
-*LiveStack HighTech Demo: Product Signal Graph*
+*LiveStack High-Tech Demo: Product Signal Graph*
 
 ## Acknowledgements
 
 * **Author** - Matt Kowalik
 * **Contributor** - Kevin Lazarz
 * **Last Updated By/Date** - Matt Kowalik, September 2026
+
+[link-1]: ?lab=getting-started#Task2:OpenSQLWorksheet
+[link-2]: https://github.com/oracle-livelabs/database/blob/main/livestack-workshop-hightech/production-quality-network/files/getting-started-material-flow-graph.dsnb
+[link-3]: https://livelabs.oracle.com/ords/r/dbpm/livelabs/view-workshop?wid=4461

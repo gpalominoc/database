@@ -17,7 +17,7 @@ Train a model to classify offers as `SURGE` or `STABLE`, then combine its scores
 >
 > - **Classification** predicts a label. Otto's model predicts either `SURGE` or `STABLE`.
 >
-> - A **probability** is the model's value for a class. In this lab, the value is displayed as a `SURGE_SCORE` to rank stay offers for review. It is not a guarantee.
+> - A **probability** is the model’s estimated value for a particular class. `SURGE_SCORE` is the probability assigned to `SURGE`, from 0 to 1. `SURGE_PCT` shows the same value as a percentage. Use the score to rank stay offers for review, not as a guarantee of a future outcome.
 >
 > - **In-database machine learning** means the model is trained or scored where the source data already lives. The SQL result can include the prediction and the data used to explain it.
 
@@ -27,11 +27,16 @@ Train a model to classify offers as `SURGE` or `STABLE`, then combine its scores
 
 - Read the prepared training data and identify the model target.
 - Optionally use AutoML to compare classification models and inspect their predictions.
-- Create the selected Generalized Linear Model inside Oracle AI Database.
+- Create the example Generalized Linear Model inside Oracle AI Database.
 - Score stay offers with `PREDICTION` and `PREDICTION_PROBABILITY`.
 - Combine model output with stay offer, bookings, and engagement data for a dashboard result.
 
 Estimated Time: **10 minutes**
+
+<video controls width="100%">
+  <source src="https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/livestack/Videos/Hospitality/Workshop/Scene-08-Hospitality.mp4">
+  Your browser does not support the video tag.
+</video>
 
 > **SQL Worksheet reminder:** See [Getting Started Task 2: Open SQL Worksheet](?lab=getting-started#Task2:OpenSQLWorksheet) for the steps to paste and run SQL.
 
@@ -79,7 +84,7 @@ AutoML may take several minutes. Skip to Task 3 to train the example model direc
 
     ![Machine Learning launch from Database Actions](images/oml-launch.jpg)
 
-2. Click **AutoML**.
+2. Select **AutoML**.
 
     ![automl](images/oml-home.jpg) 
 
@@ -92,12 +97,25 @@ AutoML may take several minutes. Skip to Task 3 to train the example model direc
     | Predict         | `SURGE_LABEL`           |
     | Prediction type | `Classification`        |
     | Case ID         | `OFFER_ID`            |
-  
-    ![Hospitality classification experiment settings](images/oml-settings.jpg)
 
-    Choose **Start → Faster Results** and wait for the model leaderboard. Runtime varies; the leaderboard may take several minutes.
+     **Note:** The Predict, Prediction Type, and Case ID fields become available after a data source has been entered. Select `SURGE_LABEL`, `Classification`, and `OFFER_ID`, respectively.
 
-4. Review the leaderboard and model details.
+     To enter the **Data Source** value:
+    1. Enter *Care Demand Risk Test* in the Name field.
+    2. Select the magnifying-glass icon next to **Data Source**.
+
+    ![Hospitality classification experiment settings](images/data-source-one.png)
+
+    3. In the **Select Table** window, select *LLUSER* from the **Schema** list.
+    4. Select `OML_STAY_DEMAND_TRAINING_V` from the **Table** list.
+
+    ![Hospitality classification experiment settings](images/data-source-two.png)
+
+    5. Select **OK**.
+
+4. Choose **Start → Faster Results** and wait for the model leaderboard. Runtime varies; the leaderboard may take several minutes.
+
+5. Review the leaderboard and model details.
 
     ![Completed Stay Offer Demand Surge leaderboard](images/oml-leaderboard.jpg)
 
@@ -117,9 +135,9 @@ AutoML may take several minutes. Skip to Task 3 to train the example model direc
 
 ## Task 3: Create the selected model in SQL Developer Web
 
-If you ran AutoML, compare its results with the SQL model. Now create `OTTO_STAY_DEMAND_SURGE_MODEL` in SQL Developer Web so you can call it from a query.
+In Database Actions, open SQL Worksheet, called SQL Developer Web in this heading. Create `OTTO_STAY_DEMAND_SURGE_MODEL` using the supplied script. It trains a separate Generalized Linear Model; it does not import an AutoML model. If you completed Task 2, compare the results.
 
-The settings table tells Oracle to use the **Generalized Linear Model** used in this exercise. `PREP_AUTO` lets the database handle standard preparation of the input columns.
+The settings table selects the **Generalized Linear Model** algorithm. `PREP_AUTO` enables automatic preparation of the input columns.
 
 1. Create the settings table and train the model:
 
@@ -323,7 +341,7 @@ Otto creates sample scoring data by changing values from the training view. This
 
 3. Read the result as a dashboard user.
 
-  `PREDICTED_SURGE` tells the dashboard which label the model selected. `SURGE_SCORE` is the model value between 0 and 1, while `SURGE_PCT` presents the same value as a percentage for a dashboard user. The bookings and activity columns give the business user something to review alongside the prediction.
+  `PREDICTED_SURGE` is the class selected by the model. `SURGE_SCORE` is the probability assigned to `SURGE`, and `SURGE_PCT` shows that probability as a percentage. Compare the score with the activity values in the same row before deciding what to review.
 
 ## Conclusion: Put the Prediction Beside the Business Data
 

@@ -8,6 +8,12 @@ Combine quality alerts, production orders, component vectors, and plant location
 
 ![Jessica introduces the converged production-quality dashboard lab](images/jessica.png)
 
+<video controls width="100%">
+  <source src="https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/livestack/Videos/Manufacturing/Workshop/Scene-02-Converged-Manufacturing-Dashboard-Branded.mp4">
+  Your browser does not support the video tag.
+</video>
+
+
 ### Objectives
 
 - Run one query that combines relational, vector, JSON, and spatial database capabilities.
@@ -164,7 +170,7 @@ The query combines four data types:
 
     If the result is empty or incomplete, check for missing embeddings or an empty regional plant set.
 
-> **Interpretation:** The nearest-plant result is regional context shared by every row. It is not a machine-capability or scheduling check, and it does not reassign an order. Affected-production order counts are alert totals and may include a production order in more than one alert; do not read their sum as unique customer sites.
+> **Interpretation:** The nearest plant is regional context shared by every row. The query does not check machine capability, schedule work or reassign orders. Affected-order figures are summed from alerts, and an order may appear in more than one alert. These totals are not counts of distinct production orders or customer sites.
 
 ## Task 2: Change the investigation question
 

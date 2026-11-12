@@ -8,6 +8,12 @@ Compare three options: a JSON column, a JSON Collection Table, and a duality vie
 
 ![Thomas introduces the JSON production-order application lab](images/thomas.png)
 
+<video controls width="100%">
+  <source src="https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/livestack/Videos/Manufacturing/Workshop/Scene-03-JSON-Production-Order-Application-Branded.mp4">
+  Your browser does not support the video tag.
+</video>
+
+
 <details>
 <summary><strong>Key terms: JSON columns, JSON collections, and JSON Relational Duality</strong></summary>
 
@@ -166,7 +172,7 @@ Now read a document assembled from the existing relational orders.
 
     ![JSON production-order document returned from the duality view](images/sql-duality-document.png)
 
-    **Expected output:**
+    **Expected output:** One production-order JSON document containing the order identifier, customer-site identifier, status and nested order lines.
 
 2. Expand the document in SQL Worksheet.
     Inspect `customerSiteId`, `status`, totals, timestamps, and nested order lines. They come from the relational rows.
@@ -194,7 +200,7 @@ The existing `PRODUCTION_ORDERS_DV` lets an application update production order 
 
     `PRODUCTION_ORDERS_DV` should report update enabled and insert disabled in the initial loader definition.
 
-    Insert permissions are needed on both the root `PRODUCTION_ORDERS` table and nested `PRODUCTION_ORDER_LINES` rows.
+    Enable inserts in both the root `PRODUCTION_ORDERS` mapping and the nested `PRODUCTION_ORDER_LINES` mapping. The `WITH INSERT UPDATE` annotations allow writes through the duality view; they do not grant privileges to another database user.
 
 2. Enable insert and update for the document and its production-order lines.
 

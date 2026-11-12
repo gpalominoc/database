@@ -2,26 +2,32 @@
 
 ## Introduction
 
-This workshop runs in a **LiveLabs Sandbox**, which prepares the database, HighTech data, workshop user, and services automatically.
+This workshop runs in a **LiveLabs Sandbox**, which prepares the database, High-Tech data, workshop user, and services automatically.
 
 <details>
 <summary><strong>Key terms: Database Actions, SQL Worksheet, and LLUSER</strong></summary>
 
-> - **Database Actions** is Oracle Database’s browser workspace for SQL, objects, data, and development tools.
+> * **Database Actions** is Oracle Database’s browser workspace for SQL,
+>   objects, data, and development tools.
 >
-> - **SQL Worksheet** runs SQL and displays results, script output, and errors.
+> * **SQL Worksheet** runs SQL and displays results, script output, and errors.
 >
-> - `LLUSER` owns the workshop’s HighTech tables, views, and other hands-on objects.
+> * `LLUSER` owns the workshop’s High-Tech tables, views, and other hands-on objects.
 
 </details>
 
 Estimated Time: **5 minutes**
 
+<video controls width="100%">
+  <source src="https://c4u04.objectstorage.us-ashburn-1.oci.customer-oci.com/p/EcTjWk2IuZPZeNnD_fYMcgUhdNDIDA6rt9gaFj_WZMiL7VvxPBNMY60837hu5hga/n/c4u04/b/livelabsfiles/o/livestack/Videos/High-Tech/Workshop/Scene-01-Getting-Started-Prepare-Database-Actions.mp4">
+  Your browser does not support the video tag.
+</video>
+
 ### Objectives
 
-- Launch the LiveLabs workshop environment.
-- Use the reservation login information to open Database Actions.
-- Confirm that SQL Worksheet is connected as the workshop schema user.
+* Launch the LiveLabs workshop environment.
+* Use the reservation login information to open Database Actions.
+* Confirm that SQL Worksheet is connected as the workshop schema user.
 
 ## Task 1: Launch the LiveLabs environment
 
@@ -55,17 +61,20 @@ Estimated Time: **5 minutes**
 
     ![Database Actions tools page with Development selected and SQL highlighted in the left tools menu](images/database-actions-development-sql.svg " ")
 
-6. Use the same SQL Worksheet pattern throughout the workshop.
+6. Follow these steps whenever you use SQL Worksheet during the workshop.
 
-    - Confirm the user dropdown shows the main workshop user, usually `LLUSER`.
-    - Paste each workshop SQL block into the editor.
-    - Select **Run Statement** or press **Ctrl+Enter** to run the current SQL statement.
-    - Review the output in **Query Result** or **Script Output**, depending on the step.
-    - Use **Navigator** only when you want to inspect tables, views, or other objects.
+    * Confirm the user dropdown shows the main workshop user, usually `LLUSER`.
+    * Paste each workshop SQL block into the editor.
+    * Select **Run Statement** or press **Ctrl+Enter** to run the current SQL statement.
+    * Review the output in **Query Result** or **Script Output**, depending on
+      the step.
+    * Use **Navigator** only when you want to inspect tables, views, or other objects.
 
 7. Run this check.
 
-    `USER` identifies the signed-in user; `SYS_CONTEXT('USERENV', 'CURRENT_SCHEMA')` shows where table names resolve. Both should be `LLUSER`.
+    `USER` identifies the signed-in user;
+    `SYS_CONTEXT('USERENV', 'CURRENT_SCHEMA')` shows where table names resolve.
+    Both should be `LLUSER`.
 
     ```sql
     <copy>
@@ -86,4 +95,3 @@ Estimated Time: **5 minutes**
 * **Author** - Matt Kowalik
 * **Contributor** - Kevin Lazarz
 * **Last Updated By/Date** - Matt Kowalik, September 2026
-
