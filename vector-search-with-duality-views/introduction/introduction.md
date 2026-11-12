@@ -1,4 +1,4 @@
-# Part 2: Vector Search with Duality Views
+# From Search to AI Agents with JSON-Relational Duality Views
 
 ## Introduction
 
